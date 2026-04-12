@@ -1,0 +1,66 @@
+{% extends 'frontend/main.html' %}
+
+
+
+
+{% block content %}
+
+{% if page == 'login' %}
+
+        <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+
+
+                        <h3>
+                            Welcome Back!
+                        </h3>
+
+                        <form class='form' action="" method="POST">
+                            {% csrf_token %}
+
+
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control"
+                                   id="email"
+                                   name='email'
+                                   placeholder="name@example.com" required>
+                                <label for="floatingInput">Email address</label>
+                             </div>
+
+                        <div class="form-floating mb-4">
+                            <input  class="form-control"
+                                    id="password"
+                                    type="password"
+                                    name="password"
+                                   placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required>
+                            <label for="password">password</label>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
+                        <p class="text-center mb-0">Don't have an Account? <a href="{% url 'register' %}">Sign Up</a></p>
+                        </form>
+        </div>
+
+
+
+
+{% else %}
+<div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">Basic Form</h6>
+                            <form action="POST" enctype="multipart/form-data">
+                                {% for field in form %}
+                                <div class="mb-3">
+
+                                        {{field}}
+
+                                    </div>
+
+
+                                {% endfor %}
+                                <button type="submit" class="btn btn-primary">Sign in</button>
+                            </form>
+                        </div>
+{% endif %}
+
+{% endblock %}
+
