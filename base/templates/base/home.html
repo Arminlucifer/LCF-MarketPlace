@@ -2,4 +2,53 @@
 
 {% block content %}
 
+
+<h1 class="display-1">
+    LCF MarketPlace
+</h1>
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4 justify-content-center">
+        {% for product in products %}
+
+            <div class="col-12 col-sm-8 col-md-6 col-lg-4 mb-4">
+                <div class="bg-secondary rounded p-4 h-100 d-flex flex-column">
+                    {% if product.image_url %}
+
+                        <div class="img-fluid rounded mb-3">
+                            <img class="img-fluid rounded mb-3" src="{{ product.image_url }}" alt="{{ product.name }}" style="object-fit: cover; height: 200px;">
+                        </div>
+                    {% endif %}
+                    <h5 class="mb-2">
+                        {{ product.name }}
+                    </h5>
+                    {% if product.seller %}
+                        <p class="text-light mb-1"><strong>Seller:</strong> {{ product.seller }}</p>
+                    {% endif %}
+                    <p class="text-info mb-1"><strong>Price:</strong> {{ product.price }}T</p>
+
+                    <a href="{% url 'product_detail' product.id %}" class="btn btn-primary mt-auto w-100">
+                        مشاهده محصول
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center text-white py-5">
+                محصولی برای نمایش وجود ندارد.
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
+
+{# استایل CSS سفارشی برای مدیریت بهتر تصویر (اختیاری اما توصیه می‌شود) #}
+<style>
+.product-image-container {
+    overflow: hidden; /* اطمینان از اینکه تصویر از کانتینر بیرون نمی‌زند */
+}
+.img-fluid.rounded.w-100 {
+    display: block; /* برای حذف فضای اضافی زیر تصویر */
+}
+</style>
+
+
+
