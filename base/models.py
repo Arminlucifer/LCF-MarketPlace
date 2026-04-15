@@ -39,6 +39,13 @@ class Comment(models.Model):
     added = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, related_name='commentlikes', blank=True)
 
+    parent = models.ForeignKey('self',
+                               on_delete=models.CASCADE,
+                               null=True,
+                               blank=True,
+                               related_name='replies',)
+
+
     def __str__(self):
         return self.body[0:50]
 
