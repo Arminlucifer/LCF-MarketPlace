@@ -1,5 +1,4 @@
-
-
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from account.models import User
 from . models import Category, Product, Comment, CommentLike
@@ -57,7 +56,7 @@ def home(request):
 
 
 
-
+@login_required(login_url='login')
 def product_detail(request, id):
     product = get_object_or_404(Product, id=id)
 
@@ -70,16 +69,17 @@ def product_detail(request, id):
 
         is_liked = False
         if request.user.is_authenticated:
-            # اینجا از related_name='likes' استفاده می‌کنیم
+
             is_liked = comment.likes.filter(user=request.user).exists()
 
         comments_data.append({
             'comment': comment,
             'like_count': comment.like_count,
-            'is_liked': is_liked # وضعیت لایک کاربر فعلی
+            'is_liked': is_liked #
         })
 
     context = {'product': product, 'comments_data': comments_data}
+
 
 
     return render(request, 'base/product_detail.html', context)
