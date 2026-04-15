@@ -22,6 +22,8 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(User, related_name='productlikes', blank=True)
     is_approved = models.BooleanField(default=False)
+    image = models.ImageField(default='product_default.png', null=True)
+
 
     def __str__(self):
         return self.name

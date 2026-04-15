@@ -3,12 +3,12 @@
 
 
    <!-- Sidebar Start -->
-        <div class="sidebar pe-4 pb-3">
-            <nav class="navbar bg-secondary navbar-dark">
-                <a href="{% url 'home' %}" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>DarkPan</h3>
+        <div class="sidebar  pe-4 pb-3">
+            <div class="navbar ">
+                <a href="{% url 'home' %}" class="  bg-secondary justify-content-center  container-fluid  ">
+                    <h2 class="text-cente"> LCF</h2>
                 </a>
-                <div class="d-flex align-items-center ms-4 mb-4">
+                <div class="d-flex align-items-center pt-4 pb-4  bg-secondary w-100 px-3 justify-center ">
                     <div class="position-relative">
                         <img class="rounded-circle" src="{{request.user.avatar.url}}" alt="" style="width: 40px; height: 40px;">
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
@@ -19,13 +19,27 @@
                     </div>
                 </div>
 
+                <div class="container pt-3 " >
+                </div>
+
+
                 {% for item in all_categories %}
-                <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>{{item.name}}</a>
+
+                <div class="navbar-nav w-100 bg-secondary ">
+                    <a href="#" class="text-center pt-3 "> <h5 class="text-light  "> {{item.name}} </h5> </a>
+
+                    <div class="container-fluid  pt-1 " style="background-color: #8B0000">
+                        <div >
+
+                        </div>
+                    </div>
 
                 </div>
+
                 {% endfor %}
-            </nav>
+
+            </div>
+
         </div>
         <!-- Sidebar End -->
 

@@ -32,56 +32,50 @@
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 
-<body>
-    <div class="container-fluid position-relative d-flex p-0">
+<body class="d-flex flex-column min-vh-100 ">
+
+
 
             <!-- Spinner Start -->
-        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
+<!--        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">-->
+<!--            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">-->
+<!--                <span class="sr-only">Loading...</span>-->
+<!--            </div>-->
+<!--        </div>-->
         <!-- Spinner End -->
+
+    <div class=" container-fluid d-flex p-0 flex-grow-1">
 
             {% include 'frontend/sidebar.html' %}
 
 
 
         <!-- Content Start -->
-        <div class="content">
 
-            {% include 'frontend/navbar.html' %}
+             <div class="d-flex flex-column flex-grow-1 bg-dark content">
 
-            <!-- Blank Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="row vh-100 bg-secondary rounded align-items-center justify-content-center mx-0">
-                    <div class="col-md-6 text-center">
-                        {% block content %}
-                        {% endblock %}
-                    </div>
+                {% include 'frontend/navbar.html' %}
+
+
+
+
+                <div class="flex-grow-1">
+
+                   {% block content %}
+                    {% endblock %}
+
                 </div>
-            </div>
-            <!-- Blank End -->
 
+                <!-- Footer Start -->
+                {% include 'frontend/footer.html' %}
 
-            <!-- Footer Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="bg-secondary rounded-top p-4">
-                    <div class="row">
-                        <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="#">Your Site Name</a>, All Right Reserved.
-                        </div>
-                        <div class="col-12 col-sm-6 text-center text-sm-end">
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                            Designed By <a href="https://htmlcodex.com">HTML Codex</a>
-                            <br>Distributed By: <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
-                        </div>
-                    </div>
-                </div>
+                <!-- Footer End -->
             </div>
-            <!-- Footer End -->
-        </div>
         <!-- Content End -->
+
+        </div>
+
+
 
 
         <!-- Back to Top -->
