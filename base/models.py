@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 from  account.models import User
+
 # Create your models here.
 
 class Category(models.Model):
@@ -20,7 +21,7 @@ class Product(models.Model):
     caption = models.TextField(max_length=100, null=True, blank=True)
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    likes = models.ManyToManyField(User, related_name='productlikes', blank=True)
+    likes = models.ManyToManyField(User, related_name='liked_products', blank=True)
     is_approved = models.BooleanField(default=False)
     image = models.ImageField(default='product_default.png', null=True)
 
@@ -37,7 +38,7 @@ class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     body = models.TextField()
     added = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField(User, related_name='commentlikes', blank=True)
+
 
     parent = models.ForeignKey('self',
                                on_delete=models.CASCADE,
@@ -49,5 +50,15 @@ class Comment(models.Model):
     def __str__(self):
         return self.body[0:50]
 
-    def total_likes(self):
-        return self.likes.count()
+
+class CommentLike(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='likes')
+    added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (('user', 'comment'),)
+
+    def __str__(self):
+        return f'{self.user} liked {self.comment.id}'

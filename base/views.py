@@ -1,9 +1,11 @@
+
+
 from django.shortcuts import render, redirect, get_object_or_404
 from account.models import User
-from . models import Category, Product, Comment
+from . models import Category, Product, Comment, CommentLike
 from datetime import timedelta
 from django.utils import timezone
-
+from django.db.models import Count
 
 
 
@@ -57,9 +59,52 @@ def home(request):
 
 
 def product_detail(request, id):
-    page = 'product_detail'
     product = get_object_or_404(Product, id=id)
-    context = {'product': product, 'page': page}
+
+    comments = Comment.objects.filter(product=product).annotate(
+        like_count=Count('likes')
+    )
+
+    comments_data = []
+    for comment in comments:
+
+        is_liked = False
+        if request.user.is_authenticated:
+            # اینجا از related_name='likes' استفاده می‌کنیم
+            is_liked = comment.likes.filter(user=request.user).exists()
+
+        comments_data.append({
+            'comment': comment,
+            'like_count': comment.like_count,
+            'is_liked': is_liked # وضعیت لایک کاربر فعلی
+        })
+
+    context = {'product': product, 'comments_data': comments_data}
 
 
     return render(request, 'base/product_detail.html', context)
+
+def toggle_like(request, id):
+    if request.method == 'POST':
+        comment = get_object_or_404(Comment, id=id)
+
+
+    like_obj = CommentLike.objects.filter(
+        user=request.user,
+        comment=comment
+    )
+
+    if like_obj.exists():
+
+        like_obj.delete()
+    else:
+
+        CommentLike.objects.create(
+            user=request.user,
+            comment=comment
+        )
+
+
+    return redirect("product_detail", id=comment.product.id)
+
+
