@@ -287,3 +287,38 @@
     background: var(--dark);
     border-color: var(--primary);
 }
+
+
+.product-card-name {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* تعداد خطوط مجاز */
+    -webkit-box-orient: vertical;
+    height: 2.8em; /* ارتفاع تقریبی دو خط، با توجه به font-size */
+    line-height: 1.4em; /* ارتفاع خط */
+}
+
+.product-card-seller {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* تعداد خطوط مجاز */
+    -webkit-box-orient: vertical;
+    height: 1.4em; /* ارتفاع تقریبی یک خط */
+    line-height: 1.4em; /* ارتفاع خط */
+}
+
+/* اضافه کردن یک حداقل ارتفاع کلی برای کارت ها */
+.bg-secondary.rounded.p-3 {
+    display: flex; /* استفاده از فلکس باکس برای چیدمان داخلی کارت */
+    flex-direction: column; /* چیدمان عمودی */
+    justify-content: space-between; /* توزیع فضا بین المان ها */
+    min-height: 450px; /* یک حداقل ارتفاع دلخواه، بسته به طراحی تنظیم کنید */
+}
+
+.product-info { /* کانتینری که اطلاعات محصول توشه */
+    flex-grow: 1; /* اجازه میده این بخش تا جایی که میشه فضا اشغال کنه */
+}
+
+.product-actions { /* کانتینری که دکمه ها توشه */
+    margin-top: auto; /* دکمه ها رو به پایین میندازه */
+}

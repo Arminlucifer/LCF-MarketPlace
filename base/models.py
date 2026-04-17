@@ -44,7 +44,7 @@ class Comment(models.Model):
                                on_delete=models.CASCADE,
                                null=True,
                                blank=True,
-                               related_name='replies',)
+                               related_name='replies')
 
 
     def __str__(self):

@@ -1,8 +1,7 @@
 {% extends 'frontend/main.html' %}
 {% load static %}
 {% block content %}
-    <title>صفحه محصول</title>
-    <!-- Bootstrap CSS -->
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" integrity="sha384-nU14brUcp6StF5ZAs2OWr1BiKicVwaoUooXhX7/ySct5j6Ez1Z1rZfGg8X5lG0f5" crossorigin="anonymous">
     <style>
 
@@ -81,32 +80,136 @@
 
 
 
+
+
+
+
+{% if page == 'comment_replies' %}
+
+
 <div class="container mt-5">
     <div class="row">
-        <!-- ستون کارت محصول -->
+
         <div class="col-lg-8 mx-auto mb-4">
             <div class="card product-card" style="background-color: #181921">
                 <div class="row g-0">
-                    <!-- ستون عکس محصول -->
+
+                    <div class="col-md-5 product-image-container">
+                        <img src="{{parent_comment.product.image.url}}" class="img-fluid rounded-start" alt="Product Image Placeholder">
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="product-info-wrapper">
+                            <div class="product-details card-body">
+                                <h5 class="card-title mb-3">{{parent_comment.product.name}}</h5>
+                                <p class="product-price mb-3">Price: {{parent_comment.product.price}}$</p>
+                                <div class="mb-3">
+
+                                    <small class="text-muted">Seller: {{parent_comment.product.seller}}</small>
+                                </div>
+                                <p class="product-caption card-text text-info ">{{parent_comment.product.caption}}</p>
+
+
+                            </div>
+
+                            <div class="product-action-button p-3 pt-0">
+                                <a href="#" class="btn btn-primary rounded-pill m-2 w-100">Request To Buy</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="text-center">
+              <p class="text-light">Replies to <mark> {{parent_comment.owner}} </mark></p>
+                <h4>"{{parent_comment.body}}"</h4>
+            </div>
+            <div class="col-lg-8 mx-auto rounded ">
+                <a href="{{request.META.HTTP_REFERER}}"><strong><</strong> </a>
+            <h4>Replies</h4>
+
+            <div class="comment-section mb-3" style="background-color: #262626">
+                {% for reply in replies %}
+
+                <div class="comment px-2 ">
+                    <div  class="comment-author-info d-flex justify-content-between align-items-center">
+                        <span class="text-white">{{reply.reply.owner}}</span>
+                        <small class="comment-meta text-white ">{{reply.reply.added | timesince}} ago</small>
+                    </div>
+                    <p class="comment-text text-white mb-0 ">
+                        {{reply.reply.body}}
+                    {% if reply.reply_count > 0 %}
+                        <form action="" method="POST">
+                       <button type="button" class="btn btn-link rounded-pill p-0 "><a href="{% url 'comment_replies' reply.reply.id %}">{{reply.replies.count}} Replies</a> </button>
+                    </form>
+                    {% endif %}
+                    </p>
+
+
+                       <div class="d-flex justify-content-start align-items-center">
+
+                            <form action="{% url 'toggle_like' reply.reply.id %}" method="POST">
+                                  {% csrf_token %}
+                                     <button type="submit" class="btn btn-outline-light">
+                                         Likes ({reply.reply.like_count}})
+                                     </button>
+                            </form>
+
+                           <form action="" method="POST ">
+                                  <button type="submit" class="btn btn-outline-light m-2">
+                                          <i class="bi bi-reply"></i> Reply
+                                  </button>
+                           </form>
+
+                        </div>
+                </div>
+                {% empty %}
+                <p class="text-white">No Replies Yet!</p>
+
+
+                {% endfor %}
+
+
+
+
+            </div>
+        </div>
+        </div>
+</div>
+
+
+
+
+        {% else %}
+
+
+        <div class="container mt-5">
+    <div class="row">
+
+        <div class="col-lg-8 mx-auto mb-4">
+            <div class="card product-card" style="background-color: #181921">
+                <div class="row g-0">
+
                     <div class="col-md-5 product-image-container">
                         <img src="{{product.image.url}}" class="img-fluid rounded-start" alt="Product Image Placeholder">
                     </div>
-                    <!-- ستون اطلاعات محصول -->
+
                     <div class="col-md-7">
                         <div class="product-info-wrapper">
                             <div class="product-details card-body">
                                 <h5 class="card-title mb-3">{{product.name}}</h5>
                                 <p class="product-price mb-3">Price: {{product.price}}$</p>
-                                <p class="product-caption card-text text-info ">{{product.caption}}</p>
-                                <!-- اطلاعات بیشتر -->
                                 <div class="mb-3">
 
                                     <small class="text-muted">Seller: {{product.seller}}</small>
                                 </div>
+                                <p class="product-caption card-text text-info ">{{product.caption}}</p>
+
+
                             </div>
-                            <!-- دکمه درخواست خرید - حالا در پایین قرار می‌گیرد -->
+
                             <div class="product-action-button p-3 pt-0">
-                                <a href="#!" class="btn btn-primary rounded-pill m-2 w-100">Request To Buy</a>
+                                <a href="#" class="btn btn-primary rounded-pill m-2 w-100">Request To Buy</a>
                             </div>
                         </div>
                     </div>
@@ -114,8 +217,9 @@
             </div>
         </div>
 
-        <!-- ستون بخش نظرات -->
+
         <div class="col-lg-8 mx-auto rounded ">
+            <a href="{% url 'home' %}"><strong><</strong> </a>
             <h4>Comments</h4>
             <div class="comment-section mb-3" style="background-color: #262626">
                 {% for item in comments_data %}
@@ -125,25 +229,37 @@
                         <span class="text-white">{{item.comment.owner}}</span>
                         <small class="comment-meta text-white ">{{item.comment.added | timesince}} ago</small>
                     </div>
-                    <p class="comment-text text-white">
+                    <p class="comment-text text-white mb-0 ">
                         {{item.comment.body}}
+                    {% if item.reply_count > 0 %}
+                        <form action="" method="POST">
+                       <button type="button" class="btn btn-link rounded-pill p-0 "><a href="{% url 'comment_replies' item.comment.id %}">{{item.comment.replies.count}} Replies</a> </button>
+                    </form>
+                    {% endif %}
                     </p>
-                       <div class="d-flex justify-content-start align-items-center">
-        {# فرم برای ارسال درخواست لایک #}
-        <form action="{% url 'toggle_like' item.comment.id %}" method="POST">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-light">
-                Likes ({{item.like_count}})
-            </button>
-        </form>
 
-        <button class="btn btn-outline-light m-2">
-            <i class="bi bi-reply"></i> Reply
-        </button>
-    </div>
+
+                       <div class="d-flex justify-content-start align-items-center">
+
+                            <form action="{% url 'toggle_like' item.comment.id %}" method="POST">
+                                  {% csrf_token %}
+                                     <button type="submit" class="btn btn-outline-light">
+                                         Likes ({{item.like_count}})
+                                     </button>
+                            </form>
+
+                           <form action="" method="POST ">
+                                  <button type="submit" class="btn btn-outline-light m-2">
+                                          <i class="bi bi-reply"></i> Reply
+                                  </button>
+                           </form>
+
+                        </div>
                 </div>
                 {% empty %}
                 <p class="text-white">No comments yet. Be the first to comment!</p>
+
+
                 {% endfor %}
 
 
@@ -153,9 +269,11 @@
         </div>
     </div>
 </div>
+            {% endif %}
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 {% endblock %}
