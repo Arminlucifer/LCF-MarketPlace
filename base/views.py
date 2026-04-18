@@ -57,6 +57,8 @@ def home(request):
 
         products_data.append({'product': product, 'upload_time': upload_time_str})
 
+    print(products_data)
+
     context = {'products_data': products_data, 'product_count': product_count, "input": input}
 
 
