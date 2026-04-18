@@ -21,7 +21,7 @@
             <div class="bg-secondary rounded p-3 d-flex flex-column justify-content-between h-100">
                 {% if request.user.id == product.product.seller.id or request.user.role == 'admin' %}
                 <div class="col-12 text-end">
-                    <a href="#">X</a>
+                    <a href="{% url 'edit_ad' product.product.id %}">Edit</a>
                 </div>
                 {% endif %}
 

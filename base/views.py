@@ -194,6 +194,28 @@ def post_ad(request):
         context = {'form': form, 'categories': categories}
         return render(request, 'base/ad_form.html', context)
 
+@login_required(login_url='login')
+def edit_ad(request, id):
+    product = get_object_or_404(Product, id=id)
+    form = ProductForm(instance=product)
+    if request.user.id == product.seller.id or request.user.role == 'admin':
+        if request.method == 'POST':
+            form = ProductForm(request.POST, request.FILES, instance=product)
+            if form.is_valid():
+
+                form.save()
+                return redirect('home')
+    else:
+        return HttpResponse('You Are NOT Allowed HERE!')
+
+    context = {'product': product, 'form': form}
+
+    return render(request, 'base/edit_form.html', context)
+
+
+
+
+
 
 
 
