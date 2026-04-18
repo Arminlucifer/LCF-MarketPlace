@@ -57,7 +57,7 @@ def home(request):
 
         products_data.append({'product': product, 'upload_time': upload_time_str})
 
-    print(products_data)
+
 
     context = {'products_data': products_data, 'product_count': product_count, "input": input}
 
@@ -172,7 +172,7 @@ def toggle_like(request, id):
 
 
 
-@login_required
+@login_required(login_url='login')
 def post_ad(request):
         categories = Category.objects.all()
 
