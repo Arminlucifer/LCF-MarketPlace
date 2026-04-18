@@ -1,0 +1,39 @@
+{% extends 'frontend/main.html' %}
+
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-center h-100">
+
+    <div class="bg-secondary rounded p-4 w-75" style="max-width: 800px;">
+        <form class='form ' action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+               <select class="form-select mb-3" name="category" aria-label="Default select example">
+                <option selected disabled>Select a category!</option>
+                {% for item in categories %}
+                    <option value="{{ item.id }}">{{ item.name }}</option>
+                {% endfor %}
+            </select>
+            <input class="form-control mb-3"
+                   name='name' type="text" placeholder="Enter The Name Of Your Product" aria-label="default input example">
+            <div>
+
+                <div class="input-group mb-3 align-items-center">
+                    <span class="input-group-text">$</span>
+                    <input type="text" name="price" class="form-control" aria-label="Amount (to the nearest dollar)">
+                    <span class="input-group-text">.00</span>
+                    <input class="form-control bg-dark mx-2" type="file" name="image" id="formFileMultiple" multiple>
+                </div>
+
+            </div>
+
+
+            <textarea class="form-control" placeholder="Write About Your Product" id="floatingTextarea"
+                      style="height: 150px;" name="caption"></textarea>
+
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

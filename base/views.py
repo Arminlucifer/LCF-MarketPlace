@@ -5,9 +5,9 @@ from . models import Category, Product, Comment, CommentLike
 from datetime import timedelta
 from django.utils import timezone
 from django.db.models import Count
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import Q
-
+from . forms import ProductForm
 
 
 
@@ -167,4 +167,32 @@ def toggle_like(request, id):
 
 
     return redirect("product_detail", id=comment.product.id)
+
+
+
+@login_required
+def post_ad(request):
+        categories = Category.objects.all()
+
+        if request.method == 'POST':
+
+            form = ProductForm(request.POST, request.FILES)
+
+            if form.is_valid():
+                product = form.save(commit=False)
+                product.seller = request.user
+                product.save()
+                return redirect('home')
+
+
+
+        else:
+            form = ProductForm()
+
+        context = {'form': form, 'categories': categories}
+        return render(request, 'base/ad_form.html', context)
+
+
+
+
 
