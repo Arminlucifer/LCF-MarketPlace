@@ -22,6 +22,7 @@
                         {% if request.user.is_authenticated %}
                         <h6 class="mb-0">{{request.user.username}}</h6>
                         <span>{{request.user.role}}</span>
+
                         {% else %}
                         <a href="{% url 'login' %}"><h6 class="mb-0 pt-1">Unknown</h6></a>
 
@@ -29,9 +30,12 @@
                     </div>
                 </div>
 
-                <div class="container pt-3 " >
-                </div>
 
+
+
+                    <a href="{% url 'post_ad' %}" class="btn btn-success rounded-pill mx-4 w-100 ">
+                          Sell Your Product!
+                    </a>
 
                 <div class="navbar-nav w-100 bg-secondary ">
                     <a href="{% url 'home' %}" class="text-center pt-3 "> <h5 class="text-light  "> All </h5> </a>
