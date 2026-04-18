@@ -20,7 +20,7 @@
 
             <div class="bg-secondary rounded p-3 d-flex flex-column justify-content-between h-100">
                 {% if request.user.id == product.product.seller.id or request.user.role == 'admin' %}
-                <div class="col-12 text-end">
+                <div class="col-12 text-end pb-2 ">
                     <a href="{% url 'edit_ad' product.product.id %}">Edit</a>
                 </div>
                 {% endif %}
@@ -41,7 +41,7 @@
 
 
                  <div class="product-actions text-center mt-3">
-                     <a href="{% url 'product_detail' product.product.id %}" class="btn btn-primary rounded-pill m-2">More Info</a>
+                     <a href="{% url 'product_detail' product.product.id %}" class="btn btn-primary rounded-pill m-2" >More Info</a>
                  </div>
             </div>
         </div>

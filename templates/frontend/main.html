@@ -34,6 +34,9 @@
 
 <body class="d-flex flex-column min-vh-100">
 
+
+
+
     <!-- Spinner Start -->
     <!--        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">-->
     <!--            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">-->
@@ -47,15 +50,57 @@
         {% include 'frontend/sidebar.html' %}
 
         <!-- Main Content Wrapper Start -->
+
+
+
         <div class="d-flex flex-column flex-grow-1 bg-dark main-content-wrapper content">
 
             {% include 'frontend/navbar.html' %}
 
 
+
+            {% if messages %}
+                <div class="container mt-3">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {% if message.tags == 'error' %}
+                                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                                    <i class="fa fa-exclamation-circle me-2"></i>{{message}}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                 </div>
+                            {% elif message.tags == 'success' %}
+                                <div class="alert alert-success" role="alert">
+                                {{message}}
+                            </div>
+                            {% elif message.tags == 'warning' %}
+                                <div class="alert alert-warning" role="alert">
+                                {{message}}
+                            </div>
+                            {% elif message.tags == 'info' %}
+                                    <div class="alert alert-info" role="alert">
+                                {{message}}
+                            </div>
+                            {% else %}
+                                <div class="alert alert-dark mb-0" role="alert">
+                                {{message}}
+                            </div>
+                            {% endif %}
+
+
+
+
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% comment %} END: Display messages {% endcomment %}
+
             <div class="flex-grow-1 overflow-auto">
                 {% block content %}
                 {% endblock %}
             </div>
+
+
 
             {% include 'frontend/footer.html' %}
 

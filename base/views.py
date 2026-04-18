@@ -5,10 +5,10 @@ from . models import Category, Product, Comment, CommentLike
 from datetime import timedelta
 from django.utils import timezone
 from django.db.models import Count
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseForbidden
 from django.db.models import Q
 from . forms import ProductForm
-
+from django.contrib import messages
 
 
 
@@ -72,7 +72,7 @@ def home(request):
 def product_detail(request, id):
     product = get_object_or_404(Product, id=id)
     comments = product.comment_set.all()
-    print(comments)
+
     main_comments = comments.filter(
         parent__isnull=True
 
@@ -148,7 +148,7 @@ def comment_replies(request, id):
     return render(request, 'base/product_detail.html', context)
 
 
-
+@login_required(login_url='login')
 def toggle_like(request, id):
     if request.method == 'POST':
         comment = get_object_or_404(Comment, id=id)
@@ -198,21 +198,27 @@ def post_ad(request):
 
 @login_required(login_url='login')
 def edit_ad(request, id):
+    page = 'edit_ad'
     product = get_object_or_404(Product, id=id)
     form = ProductForm(instance=product)
+
     if request.user.id == product.seller.id or request.user.role == 'admin':
         if request.method == 'POST':
             form = ProductForm(request.POST, request.FILES, instance=product)
             if form.is_valid():
-
                 form.save()
+                messages.success(request, 'Product updated successfully')
                 return redirect('home')
+            else:
+                messages.error(request, 'Failed to update ad. Please check the errors below.')
+        context = {'product': product, 'form': form, 'page': page}
+
+        return render(request, 'base/ad_form.html', context)
+
     else:
-        return HttpResponse('You Are NOT Allowed HERE!')
+        messages.error(request, 'You are not allowed to edit this product.')
+        return redirect('home')
 
-    context = {'product': product, 'form': form}
-
-    return render(request, 'base/edit_form.html', context)
 
 
 

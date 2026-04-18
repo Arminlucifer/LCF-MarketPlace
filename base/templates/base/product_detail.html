@@ -197,6 +197,12 @@
                     <div class="col-md-7">
                         <div class="product-info-wrapper">
                             <div class="product-details card-body">
+                                {% if request.user.id == product.product.seller.id or request.user.role == 'admin' %}
+                                <div class="col-12 text-end pb-2 ">
+                                    <a href="{% url 'edit_ad' product.id %}" class="mx-2">Edit</a>
+                                    <a href="#">X</a>
+                                 </div>
+                                {% endif %}
                                 <h5 class="card-title mb-3">{{product.name}}</h5>
                                 <p class="product-price mb-3">Price: {{product.price}}$</p>
                                 <div class="mb-3">
@@ -257,7 +263,7 @@
                         </div>
                 </div>
                 {% empty %}
-                <p class="text-white">No comments yet. Be the first to comment!</p>
+                <p class="text-white">No comments yet. Be the first to comment !</p>
 
 
                 {% endfor %}

@@ -2,38 +2,199 @@
 
 {% block content %}
 
-<div class="d-flex align-items-center justify-content-center h-100">
 
-    <div class="bg-secondary rounded p-4 w-75" style="max-width: 800px;">
-        <form class='form ' action="" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
+{% if page == 'edit_ad' %}
+    <div class="d-flex align-items-center justify-content-center h-100">
+        <div class="bg-secondary rounded p-4 w-75 mb-4 " style="max-width: 800px;">
+            <form class='form ' action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
 
-               <select class="form-select mb-3" name="category" aria-label="Default select example">
-                <option selected disabled>Select a category!</option>
-                {% for item in categories %}
-                    <option value="{{ item.id }}">{{ item.name }}</option>
-                {% endfor %}
-            </select>
-            <input class="form-control mb-3"
-                   name='name' type="text" placeholder="Enter The Name Of Your Product" aria-label="default input example">
-            <div>
 
-                <div class="input-group mb-3 align-items-center">
-                    <span class="input-group-text">$</span>
-                    <input type="text" name="price" class="form-control" aria-label="Amount (to the nearest dollar)">
-                    <span class="input-group-text">.00</span>
-                    <input class="form-control bg-dark mx-2" type="file" name="image" id="formFileMultiple" multiple>
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+
+                <div class="mb-3">
+                    <label for="category" class="form-label">Select a category!</label>
+                    <select class="form-select {% if form.errors.category %} is-invalid {% endif %}" name="category" id="category" aria-label="Default select example">
+                        <option selected disabled>Select a category!</option>
+                        {% for item in categories %}
+                            <option value="{{ item.id }}" {% if product.category.id == item.id %} selected {% endif %}>{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                    {% if form.errors.category %}
+                        <div class="invalid-feedback">
+                            {% for error in form.errors.category %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
 
-            </div>
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Product Name</label>
+                    <input class="form-control {% if form.errors.name %} is-invalid {% endif %}" name='name' type="text" id="name" aria-label="default input example" value="{{ product.name }}">
+                    {% if form.errors.name %}
+                        <div class="invalid-feedback">
+                            {% for error in form.errors.name %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
 
 
-            <textarea class="form-control" placeholder="Write About Your Product" id="floatingTextarea"
-                      style="height: 150px;" name="caption"></textarea>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <div class="input-group {% if form.errors.price %} is-invalid {% endif %}">
+                        <span class="input-group-text">$</span>
+                        <input type="text" name="price" id="price" class="form-control" aria-label="Amount (to the nearest dollar)" value="{{ product.price }}">
+                        <span class="input-group-text">.00</span>
+                    </div>
+                    {% if form.errors.price %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.errors.price %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
 
-            <button type="submit" class="btn btn-primary mt-3">Submit</button>
 
-        </form>
+                <div class="mb-3">
+                    <label for="formFileMultiple" class="form-label">Product Image</label>
+                    {% if product.image %}
+                        <div class="mb-2">
+                            <p>Current Image:</p>
+                            <img src="{{ product.image.url }}" alt="Product Image" class="img-fluid rounded" style="max-width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                        </div>
+                    {% endif %}
+                    <input class="form-control {% if form.errors.image %} is-invalid {% endif %}" type="file" name="image" id="formFileMultiple" multiple>
+                    {% if form.errors.image %}
+                        <div class="invalid-feedback">
+                            {% for error in form.errors.image %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="floatingTextarea" class="form-label">Write About Your Product</label>
+                    <textarea class="form-control {% if form.errors.caption %} is-invalid {% endif %}" placeholder="Write About Your Product" id="floatingTextarea" style="height: 150px;" name="caption">{{ product.caption }}</textarea>
+                    {% if form.errors.caption %}
+                        <div class="invalid-feedback">
+                            {% for error in form.errors.caption %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            </form>
+        </div>
     </div>
-</div>
+
+
+{% else %}
+    <div class="d-flex align-items-center justify-content-center h-100">
+        <div class="bg-secondary rounded p-4 w-75" style="max-width: 800px;">
+            <form class='form ' action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+
+                <div class="mb-3">
+                    <label for="category" class="form-label">Select a category!</label>
+                    <select class="form-select {% if form.errors.category %} is-invalid {% endif %}" name="category" id="category" aria-label="Default select example">
+                        <option selected disabled>Select a category!</option>
+                        {% for item in categories %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                    {% if form.errors.category %}
+                        <div class="invalid-feedback">
+                            {% for error in form.errors.category %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Product Name</label>
+                    <input class="form-control {% if form.errors.name %} is-invalid {% endif %}" name='name' type="text" id="name" placeholder="Enter The Name Of Your Product" aria-label="default input example">
+                    {% if form.errors.name %}
+                        <div class="invalid-feedback">
+                            {% for error in form.errors.name %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label for="price" class="form-label">Price</label>
+                    <div class="input-group mb-3 {% if form.errors.price %} is-invalid {% endif %}">
+                        <span class="input-group-text">$</span>
+                        <input type="text" name="price" id="price" class="form-control" aria-label="Amount (to the nearest dollar)">
+                        <span class="input-group-text">.00</span>
+                    </div>
+                    {% if form.errors.price %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.errors.price %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+
+                    <label for="formFileMultiple" class="form-label">Product Image</label>
+                    <input class="form-control {% if form.errors.image %} is-invalid {% endif %}" type="file" name="image" id="formFileMultiple" multiple>
+                    {% if form.errors.image %}
+                        <div class="invalid-feedback">
+                            {% for error in form.errors.image %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="floatingTextarea" class="form-label">Write About Your Product</label>
+                    <textarea class="form-control {% if form.errors.caption %} is-invalid {% endif %}" placeholder="Write About Your Product" id="floatingTextarea" style="height: 150px;" name="caption"></textarea>
+                    {% if form.errors.caption %}
+                        <div class="invalid-feedback">
+                            {% for error in form.errors.caption %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            </form>
+        </div>
+    </div>
+{% endif %}
 {% endblock %}
