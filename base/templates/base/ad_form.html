@@ -4,8 +4,8 @@
 
 
 {% if page == 'edit_ad' %}
-    <div class="d-flex align-items-center justify-content-center h-100">
-        <div class="bg-secondary rounded p-4 w-75 mb-4 " style="max-width: 800px;">
+    <div class="d-flex align-items-center justify-content-center h-100 p-3">
+        <div class="bg-secondary rounded p-4" style="max-width: 600px; width: 100%;">
             <form class='form ' action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
@@ -106,7 +106,7 @@
 
 {% else %}
     <div class="d-flex align-items-center justify-content-center h-100">
-        <div class="bg-secondary rounded p-4 w-75" style="max-width: 800px;">
+        <div class="bg-secondary rounded p-4" style="max-width: 600px; width: 100%;">
             <form class='form ' action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
