@@ -93,6 +93,12 @@
         <div class="col-lg-8 mx-auto mb-4">
             <div class="card product-card" style="background-color: #181921">
                 <div class="row g-0">
+                      {% if request.user.id == product.product.seller.id or request.user.role == 'admin' %}
+                                <div class="col-12 text-end pb-2 ">
+                                    <a href="{% url 'edit_ad' product.id %}" class="mx-2">Edit</a>
+                                    <a href="{% url 'delete_ad' product.id %}">X</a>
+                                 </div>
+                                {% endif %}
 
                     <div class="col-md-5 product-image-container">
                         <img src="{{parent_comment.product.image.url}}" class="img-fluid rounded-start" alt="Product Image Placeholder">
@@ -200,7 +206,7 @@
                                 {% if request.user.id == product.product.seller.id or request.user.role == 'admin' %}
                                 <div class="col-12 text-end pb-2 ">
                                     <a href="{% url 'edit_ad' product.id %}" class="mx-2">Edit</a>
-                                    <a href="#">X</a>
+                                    <a href="{% url 'delete_ad' product.id %}">X</a>
                                  </div>
                                 {% endif %}
                                 <h5 class="card-title mb-3">{{product.name}}</h5>

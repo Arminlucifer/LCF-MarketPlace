@@ -9,5 +9,6 @@ urlpatterns = [
     path('replies/<uuid:id>/', views.comment_replies, name='comment_replies'),
     path('post_ad/', views.post_ad, name='post_ad'),
     path('edit_ad/<uuid:id>', views.edit_ad, name='edit_ad'),
+    path('delete_ad/<uuid:id>', views.delete_ad, name='delete_ad'),
 
 ]

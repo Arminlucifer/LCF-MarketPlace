@@ -219,7 +219,20 @@ def edit_ad(request, id):
         messages.error(request, 'You are not allowed to edit this product.')
         return redirect('home')
 
+def delete_ad(request, id):
+    product = get_object_or_404(Product, id=id)
+    if request.user.id == product.seller.id or request.user.role == 'admin':
+        if request.method == 'POST':
+            product.delete()
+            messages.success(request, 'Product deleted successfully')
 
+
+        else:
+            return render( request, 'base/delete.html',{'obj': product} )
+    else:
+        messages.error(request, 'You are not allowed to delete this product.')
+
+    return redirect('home')
 
 
 
