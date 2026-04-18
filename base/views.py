@@ -71,9 +71,11 @@ def home(request):
 @login_required(login_url='login')
 def product_detail(request, id):
     product = get_object_or_404(Product, id=id)
-
-    main_comments = Comment.objects.filter(
+    comments = product.comment_set.all()
+    print(comments)
+    main_comments = comments.filter(
         parent__isnull=True
+
     ).annotate(
         like_count=Count('likes', distinct=True),
 
