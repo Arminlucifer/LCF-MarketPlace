@@ -1,0 +1,27 @@
+{% extends 'frontend/main.html' %}
+
+{% block content %}
+<div class="container-fluid d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+
+    <div class="bg-secondary rounded p-1" style="max-width: 500px; width: 100%;">
+
+
+        <div class="w-100 mx-2">
+            <a href="{{ request.META.HTTP_REFERER }}" class="text-light fs-3" style="text-decoration: none;">
+                &larr;
+            </a>
+        </div>
+
+        <form method="POST" action="" class="d-flex flex-column align-items-center text-center">
+            {% csrf_token %}
+
+            <p class="mb-2">Are You Sure You Want To Delete</p>
+            <h6 class="mb-0">"{{ obj }}"</h6>
+
+            <button type="submit" class="btn btn-danger mt-4 mb-4">Delete</button>
+        </form>
+
+    </div>
+
+</div>
+{% endblock %}
