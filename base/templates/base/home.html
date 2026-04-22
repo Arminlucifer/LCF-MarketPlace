@@ -117,6 +117,7 @@
 </div>
 {% else %}
 
+
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
 
@@ -126,46 +127,49 @@
             </h3>
         </div>
 
-        <div class="col-12 mb-3 ">
-                <p class="text-muted text-center ">Total products: {{product_count}} </p>
+        <div class="col-12 mb-3">
+            <p class="text-muted text-center">Total products: {{product_count}}</p>
         </div>
 
-    {% for product in products_data %}
-     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-
-            <div class="bg-secondary rounded p-4 d-flex flex-column justify-content-between h-100">
-                <div class="col-12 h-50">
-
+        {% for product in products_data %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+            
+            <!-- کلاس h-100 و d-flex flex-column پایه اصلی تراز شدن هستن -->
+            <div class="bg-secondary rounded p-4 d-flex flex-column h-100">
+                
+                <!-- بخش بالا: دکمه Edit و عکس محصول -->
+                <div>
                     {% if request.user.id == product.product.seller.id or request.user.role == 'admin' %}
-                <div class="col-12 text-end pb-2">
-                    <a href="{% url 'edit_ad'  product.product.id %}" class="text-warning text-decoration-none">Edit</a>
+                    <div class="col-12 text-end pb-2">
+                        <a href="{% url 'edit_ad' product.product.id %}" class="text-warning text-decoration-none">Edit</a>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3 text-center">
+                        <!-- اینجا cover رو به contain تغییر دادیم تا عکس‌های عمودی کامل و بدون برش بیفتن -->
+                        <img src="{{product.product.image.url}}" class="img-fluid rounded" alt="{{product.product.name}}" style="height: 180px; width: 100%; object-fit: contain;">
+                    </div>
                 </div>
-                {% endif %}
-                
-                 <div class="mb-3 text-center">
-                    <img src="{{product.product.image.url}}" class="img-fluid rounded" alt="{{product.product.name}}" style="max-height: 200px; width: auto;">
-                 </div>
 
-                </div>
-                
-
-
-                 <div class="product-info flex-grow-1">
+                <!-- بخش وسط: اطلاعات محصول. کلاس flex-grow-1 باعث میشه این بخش کش بیاد و دکمه رو هل بده پایین -->
+                <div class="product-info flex-grow-1">
                     <h6 class="text-primary fw-bold mb-2 product-card-name">{{product.product.name}}</h6>
                     <p class="text-muted">{{product.product.category.name}}</p>
                     <p class="fs-5 fw-bold text-white mb-2">{{product.product.price}}$</p>
-                     <a href="{% url 'profile' product.product.seller.username %}"><p class="text-muted mb-2">@{{product.product.seller}}</p></a>
+                    <a href="{% url 'profile' product.product.seller.username %}" class="text-decoration-none">
+                        <p class="text-muted mb-2">@{{product.product.seller}}</p>
+                    </a>
+                    <p class="text-muted small">{{product.upload_time}}</p>
+                </div>
 
-                     <p>{{product.upload_time}}</p>
-                 </div>
-
-
-                 <div class="product-actions text-center mt-1">
-                     <a href="{% url 'product_detail' product.product.id %}" class="btn btn-primary rounded-pill m-2" >More Info</a>
-                 </div>
+                <!-- بخش پایین: دکمه‌ها. کلاس mt-auto این بخش رو دقیقاً به کف کارت می‌چسبونه -->
+                <div class="product-actions text-center mt-auto pt-2">
+                    <a href="{% url 'product_detail' product.product.id %}" class="btn btn-primary rounded-pill px-4">More Info</a>
+                </div>
+                
             </div>
         </div>
-    {% endfor %}
+        {% endfor %}
 
     </div>
 </div>
