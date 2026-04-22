@@ -71,33 +71,46 @@
             <h4 class="text-white border-bottom border-secondary pb-2">Products For Sale</h4>
         </div>
 
-        {% for product in products %}
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-            <div class="bg-secondary rounded p-3 d-flex flex-column justify-content-between h-100">
+    {% for product in products_data %}
+     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
 
-                {% if request.user.id == product.seller.id or request.user.role == 'admin' %}
-                <div class="col-12 text-end pb-2">
-                    <a href="{% url 'edit_ad' product.id %}" class="text-warning text-decoration-none">Edit</a>
+    
+            <div class="bg-secondary rounded p-4 d-flex flex-column h-100">
+                
+    
+                <div class="col-12 mb-3">
+                    {% if request.user.id == product.product.seller.id or request.user.role == 'admin' %}
+                    <div class="text-end pb-2">
+                        <a href="{% url 'edit_ad'  product.product.id %}" class="text-warning text-decoration-none">Edit</a>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="text-center">
+                 
+                        <img src="{{product.product.image.url}}" class="img-fluid rounded" alt="{{product.product.name}}" style="height: 180px; width: 100%; object-fit: contain;">
+                    </div>
                 </div>
-                {% endif %}
 
-                 <div class="mb-3 text-center">
-                    <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}" style="max-height: 200px; width: auto; object-fit: cover;">
-                 </div>
-
+           
                  <div class="product-info flex-grow-1">
-                    <h6 class="text-primary fw-bold mb-2">{{ product.name }}</h6>
-                    <p class="text-muted mb-1">{{ product.category.name }}</p>
-                    <p class="fs-5 fw-bold text-white mb-2">${{ product.price }}</p>
-                    <p class="text-muted mb-0" style="font-size: 0.8rem;">{{ product.upload_time|timesince }} ago</p>
+                    <h6 class="text-primary fw-bold mb-2 product-card-name">{{product.product.name}}</h6>
+                    <p class="text-muted mb-2">{{product.product.category.name}}</p>
+                    <p class="fs-5 fw-bold text-white mb-2">{{product.product.price}}$</p>
+                     <a href="{% url 'profile' product.product.seller.username %}" class="text-decoration-none">
+                        <p class="text-muted mb-2">@{{product.product.seller}}</p>
+                     </a>
+                     <p class="small text-muted mb-0">{{product.upload_time}}</p>
                  </div>
 
-                 <div class="product-actions text-center mt-3">
-                     <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-primary rounded-pill w-100">More Info</a>
+               
+                 <div class="product-actions text-center mt-auto pt-3">
+                     <a href="{% url 'product_detail' product.product.id %}" class="btn btn-primary rounded-pill px-4" >More Info</a>
                  </div>
+                 
             </div>
         </div>
-        {% endfor %}
+    {% endfor %}
+
     </div>
     {% endif %}
 
@@ -120,16 +133,21 @@
     {% for product in products_data %}
      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
 
-            <div class="bg-secondary rounded p-3 d-flex flex-column justify-content-between h-100">
-                {% if request.user.id == product.product.seller.id or request.user.role == 'admin' %}
+            <div class="bg-secondary rounded p-4 d-flex flex-column justify-content-between h-100">
+                <div class="col-12 h-50">
+
+                    {% if request.user.id == product.product.seller.id or request.user.role == 'admin' %}
                 <div class="col-12 text-end pb-2">
                     <a href="{% url 'edit_ad'  product.product.id %}" class="text-warning text-decoration-none">Edit</a>
                 </div>
                 {% endif %}
-
+                
                  <div class="mb-3 text-center">
                     <img src="{{product.product.image.url}}" class="img-fluid rounded" alt="{{product.product.name}}" style="max-height: 200px; width: auto;">
                  </div>
+
+                </div>
+                
 
 
                  <div class="product-info flex-grow-1">
@@ -142,7 +160,7 @@
                  </div>
 
 
-                 <div class="product-actions text-center mt-3">
+                 <div class="product-actions text-center mt-1">
                      <a href="{% url 'product_detail' product.product.id %}" class="btn btn-primary rounded-pill m-2" >More Info</a>
                  </div>
             </div>
