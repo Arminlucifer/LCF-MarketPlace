@@ -1,0 +1,51 @@
+{% extends 'frontend/main.html' %}
+
+{% block content %}
+<div class="container-fluid align-items-center justify-content-center">
+    <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+
+            <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+                <div class="d-flex align-items-center justify-content-center mb-3">
+                    <h3 class="text-primary">Edit Your Profile</h3>
+                </div>
+                
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                   <div class="form-floating mb-3">
+                        
+                        <input name="name" type="text" class="form-control" id="floatingName" value="{{ profile_user.name }}" placeholder="Name">
+                        <label for="floatingName">Name</label>
+                   </div>
+
+                   <div class="form-floating mb-3">
+                        <input name="email" type="email" class="form-control" id="floatingEmail" value="{{ profile_user.email }}" placeholder="Email">
+                        <label for="floatingEmail">Email</label>
+                   </div>
+
+                   <div class="form-floating mb-3">
+                        
+                        <textarea class="form-control" name="bio" id="floatingBio" style="height: 150px;" placeholder="Bio">{{ profile_user.bio }}</textarea>
+                        <label for="floatingBio">Bio</label>
+                   </div>
+
+                   <div class="mb-3">
+                        <label class="form-label">Profile Picture</label>
+                        {% if profile_user.avatar %}
+                            <div class="mb-2">
+                                <p class="text-muted" style="font-size: 0.9em;">Current Image:</p>
+                                <img src="{{ profile_user.avatar.url }}" alt="Profile Image" class="img-fluid rounded" style="max-width: 150px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                            </div>
+                        {% endif %}
+                        <input class="form-control" type="file" name="avatar" id="formFileMultiple">
+                   </div>
+
+                   <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Save Changes</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

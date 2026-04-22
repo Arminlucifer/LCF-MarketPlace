@@ -40,10 +40,10 @@
         {% if user.role == 'seller' %}
             <div class="d-flex justify-content-center gap-3 mt-2">
                 <span class="badge bg-primary px-3 py-2 fs-6 rounded-pill">
-                    تعداد محصولات: {{ products.count }}
+                   Total Products: {{ products.count }}
                 </span>
                 <span class="badge bg-dark px-3 py-2 fs-6 rounded-pill text-primary border border-primary">
-                    فروشنده تایید شده 🛒
+                   approved user
                 </span>
             </div>
         {% elif user.role == 'admin' %}
