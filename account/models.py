@@ -15,7 +15,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=200, unique=True)
     email = models.EmailField(max_length=254, unique=True)
     phone = models.CharField(max_length=11, unique=True, null=True, blank=True)
-
+    bio = models.TextField(max_length=500, null=True, blank=True)
     avatar = models.ImageField(default='default.png', null=True)
 
 

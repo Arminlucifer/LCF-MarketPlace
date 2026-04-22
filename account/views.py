@@ -1,8 +1,12 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
+
+from base.models import Product
 from . models import User
 from account.forms import MyUserCreationForm
 from django.contrib.auth import  authenticate, login, logout
 from django.contrib import messages
+from base.models import Product
 
 def loginuser(request):
         page = 'login'
@@ -47,3 +51,21 @@ def registeruser(request):
 
         context = {'form':form}
         return render(request, 'account/login-register.html', context)
+
+
+def profile(request, username):
+    page = 'profile'
+    user = User.objects.get(username=username)
+    print(user.avatar.url)
+    products = user.product_set.all()
+    products_count = products.count()
+
+    products_data = []
+
+
+
+
+    context = {'user':user, 'page':page, "products_count":products_count, "products":products}
+
+
+    return render(request, 'base/home.html', context)
