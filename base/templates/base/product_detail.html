@@ -139,7 +139,7 @@
 
                 <div class="comment px-2 ">
                     <div  class="comment-author-info d-flex justify-content-between align-items-center">
-                        <span class="text-white">{{reply.reply.owner}}</span>
+                        <a href="{% url 'profile' reply.owner.username %}">{{reply.reply.owner}}</a>
                         <small class="comment-meta text-white ">{{reply.reply.added | timesince}} ago</small>
                     </div>
                     <p class="comment-text text-white mb-0 ">
@@ -157,7 +157,7 @@
                             <form action="{% url 'toggle_like' reply.reply.id %}" method="POST">
                                   {% csrf_token %}
                                      <button type="submit" class="btn btn-outline-light">
-                                         Likes ({reply.reply.like_count}})
+                                         Likes {{reply.reply.like_count}}
                                      </button>
                             </form>
 
@@ -238,7 +238,10 @@
 
                 <div class="comment px-2 ">
                     <div  class="comment-author-info d-flex justify-content-between align-items-center">
-                        <span class="text-white">{{item.comment.owner}}</span>
+                        <a href="{% url 'profile' item.comment.owner.username %}">
+                                @<span class="text-primary">{{item.comment.owner}}</span>
+                        </a>
+                        
                         <small class="comment-meta text-white ">{{item.comment.added | timesince}} ago</small>
                     </div>
                     <p class="comment-text text-white mb-0 ">
