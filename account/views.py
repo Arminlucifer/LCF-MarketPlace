@@ -66,6 +66,10 @@ def profile(request, username):
     products = user.product_set.all()
     products_count = products.count()
 
+    print(products_count)
+
+    print(products)
+
     context = {'user': user, 'page': page,
                "products_count": products_count, "products": products}
 
