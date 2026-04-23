@@ -301,24 +301,44 @@
 .product-card-seller {
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 1; /* تعداد خطوط مجاز */
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
-    height: 1.4em; /* ارتفاع تقریبی یک خط */
-    line-height: 1.4em; /* ارتفاع خط */
+    height: 1.4em;
+    line-height: 1.4em;
 }
 
-/* اضافه کردن یک حداقل ارتفاع کلی برای کارت ها */
 .bg-secondary.rounded.p-3 {
-    display: flex; /* استفاده از فلکس باکس برای چیدمان داخلی کارت */
-    flex-direction: column; /* چیدمان عمودی */
-    justify-content: space-between; /* توزیع فضا بین المان ها */
-    min-height: 450px; /* یک حداقل ارتفاع دلخواه، بسته به طراحی تنظیم کنید */
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    min-height: 450px; 
 }
 
-.product-info { /* کانتینری که اطلاعات محصول توشه */
-    flex-grow: 1; /* اجازه میده این بخش تا جایی که میشه فضا اشغال کنه */
+.product-info { 
+    flex-grow: 1; 
 }
 
-.product-actions { /* کانتینری که دکمه ها توشه */
-    margin-top: auto; /* دکمه ها رو به پایین میندازه */
+.product-actions { 
+    margin-top: auto;
 }
+
+/* استایل برای لینک‌های سایدبار */
+.custom-sidebar-nav .nav-link {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    padding: 8px 15px;
+}
+
+/* افکت هاور (وقتی ماوس میره روی لینک) */
+.custom-sidebar-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px); 
+}
+
+/* استایل دکمه Browse More */
+.custom-sidebar-nav .text-warning:hover {
+    background-color: transparent !important;
+    color: #ffc107 !important;
+    opacity: 0.8;
+}
+

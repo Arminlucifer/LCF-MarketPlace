@@ -121,6 +121,17 @@
 
     <!-- Template Javascript -->
     <script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+    function toggleBrowseText(element) {
+        if (element.getAttribute("aria-expanded") === "true") {
+            element.innerHTML = 'Show Less <span class="arrow-icon">▲</span>';
+        } else {
+            element.innerHTML = 'Browse More <span class="arrow-icon">▼</span>';
+        }
+    }
+</script>
+
 </body>
 
 </html>
