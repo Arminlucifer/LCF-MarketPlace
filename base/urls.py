@@ -10,5 +10,6 @@ urlpatterns = [
     path('post_ad/', views.post_ad, name='post_ad'),
     path('edit_ad/<uuid:id>', views.edit_ad, name='edit_ad'),
     path('delete_ad/<uuid:id>', views.delete_ad, name='delete_ad'),
+    path('add_comment/<uuid:id>/', views.add_comment, name='add_comment'),
 
 ]

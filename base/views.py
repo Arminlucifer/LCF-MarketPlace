@@ -7,9 +7,8 @@ from django.utils import timezone
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseForbidden
 from django.db.models import Q
-from . forms import ProductForm
+from .forms import ProductForm, CommentForm
 from django.contrib import messages
-
 
 
 
@@ -107,45 +106,32 @@ def product_detail(request, id):
     return render(request, 'base/product_detail.html', context)
 
 
+@login_required(login_url='login')
 def comment_replies(request, id):
     page = 'comment_replies'
     parent_comment = get_object_or_404(Comment, id=id)
 
-
-    replies = Comment.objects.filter(parent = parent_comment).annotate(
+    replies = Comment.objects.filter(parent=parent_comment).annotate(
         like_count=Count('likes'),
         reply_count=Count('replies')
     ).order_by('-reply_count', '-like_count')
 
-    replies_data = []
+
+    is_liked_map = {}
     if request.user.is_authenticated:
-        for reply in replies:
-            is_liked = reply.likes.filter(user=request.user).exists()
-            replies_data.append({
-                'reply': reply,
-                'like_count': reply.like_count,
-                'is_liked': is_liked,
+        liked_ids = replies.filter(likes__user=request.user).values_list('id', flat=True)
+        is_liked_map = {id: True for id in liked_ids}
 
-            })
-    else:
-
-        for reply in replies:
-            replies_data.append({
-                'reply': reply,
-                'like_count': reply.like_count,
-                'is_liked': False,
-                'reply_count': reply.reply_count,
-            })
 
     context = {
-        'replies': replies_data,
+        'replies': replies,
         'parent_comment': parent_comment,
-        'page': page
+        'page': page,
+        'is_liked_map': is_liked_map,
     }
 
-
-
     return render(request, 'base/product_detail.html', context)
+
 
 
 @login_required(login_url='login')
@@ -233,6 +219,40 @@ def delete_ad(request, id):
         messages.error(request, 'You are not allowed to delete this product.')
 
     return redirect('home')
+
+@login_required(login_url='login')
+def add_comment(request, id):
+    product = get_object_or_404(Product, id=id)
+
+
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.owner = request.user
+            new_comment.product = product
+
+        parent_id = request.POST.get('parent_id')
+        if parent_id:
+            try:
+                parent_comment = Comment.objects.get(id=parent_id)
+                new_comment.parent = parent_comment
+            except Comment.DoesNotExist:
+                pass
+
+        new_comment.save()
+
+        messages.success(request, 'Comment added successfully')
+        return redirect('product_detail', id=product.id)
+
+
+
+
+
+    context = {'product': product, 'form': form}
+    return render(request, 'base/product_detail.html', context)
+
 
 
 
