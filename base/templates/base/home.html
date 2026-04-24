@@ -43,7 +43,7 @@
                    Total Products: {{ products.count }}
                 </span>
                 <span class="badge bg-dark px-3 py-2 fs-6 rounded-pill text-primary border border-primary">
-                   approved user
+                    {{user.role}}
                 </span>
             </div>
         {% elif user.role == 'admin' %}

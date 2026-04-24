@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'base.context_processors.category_renderer',
+                'base.context_processors.notification_renderer'
             ],
         },
     },
@@ -129,7 +130,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
@@ -138,4 +138,3 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_ROOT = 'static/img'
-

@@ -1,13 +1,18 @@
 import uuid
 
 from django.db import models
-from  account.models import User
+from account.models import User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
+
 
 # Create your models here.
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100, null=True)
     photo = models.ImageField(default='category_default.png', null=True)
+
     def __str__(self):
         return self.name
 
@@ -21,16 +26,17 @@ class Product(models.Model):
     caption = models.TextField(max_length=100, null=True, blank=True)
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    likes = models.ManyToManyField(User, related_name='liked_products', blank=True)
+    likes = models.ManyToManyField(
+        User, related_name='liked_products', blank=True)
     is_approved = models.BooleanField(default=False)
     image = models.ImageField(default='product_default.png', null=True)
-
 
     def __str__(self):
         return self.name
 
     class Meta:
         ordering = ['-added']
+
 
 class Comment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -39,13 +45,11 @@ class Comment(models.Model):
     body = models.TextField()
     added = models.DateTimeField(auto_now_add=True)
 
-
     parent = models.ForeignKey('self',
                                on_delete=models.CASCADE,
                                null=True,
                                blank=True,
                                related_name='replies')
-
 
     def __str__(self):
         return self.body[0:50]
@@ -54,7 +58,8 @@ class Comment(models.Model):
 class CommentLike(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='likes')
+    comment = models.ForeignKey(
+        Comment, on_delete=models.CASCADE, related_name='likes')
     added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -62,3 +67,24 @@ class CommentLike(models.Model):
 
     def __str__(self):
         return f'{self.user} liked {self.comment.id}'
+
+
+class Notification(models.Model):
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    text = models.CharField(max_length=250)
+
+    is_read = models.BooleanField(default=False)
+
+    created_at = models.TimeField(auto_now_add=True)
+
+    content_type = models.ForeignKey(
+        ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    object_id = models.UUIDField(null=True, blank=True)
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    def __str__(self):
+        return f'Notification for {self.user.username} - Read {self.is_read}'

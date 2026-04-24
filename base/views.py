@@ -11,10 +11,6 @@ from .forms import ProductForm, CommentForm
 from django.contrib import messages
 
 
-
-
-
-
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     input = request.GET.get('q')
@@ -25,8 +21,6 @@ def home(request):
         Q(seller__name__icontains=q)
     )
     product_count = products.count()
-
-
 
     now = timezone.now()
     products_data = []
@@ -54,17 +48,13 @@ def home(request):
         else:
             upload_time_str = f'{product.added}'
 
-        products_data.append({'product': product, 'upload_time': upload_time_str})
+        products_data.append(
+            {'product': product, 'upload_time': upload_time_str})
 
-
-
-    context = {'products_data': products_data, 'product_count': product_count, "input": input}
-
-
-
+    context = {'products_data': products_data,
+               'product_count': product_count, "input": input}
 
     return render(request, 'base/home.html', context)
-
 
 
 @login_required(login_url='login')
@@ -81,7 +71,6 @@ def product_detail(request, id):
         reply_count=Count('replies')
     ).order_by('-reply_count', '-like_count',)
 
-
     comments_data = []
     for comment in main_comments:
 
@@ -97,11 +86,7 @@ def product_detail(request, id):
             'reply_count': comment.reply_count,
         })
 
-
     context = {'product': product, 'comments_data': comments_data}
-
-
-
 
     return render(request, 'base/product_detail.html', context)
 
@@ -116,12 +101,11 @@ def comment_replies(request, id):
         reply_count=Count('replies')
     ).order_by('-reply_count', '-like_count')
 
-
     is_liked_map = {}
     if request.user.is_authenticated:
-        liked_ids = replies.filter(likes__user=request.user).values_list('id', flat=True)
+        liked_ids = replies.filter(
+            likes__user=request.user).values_list('id', flat=True)
         is_liked_map = {id: True for id in liked_ids}
-
 
     context = {
         'replies': replies,
@@ -133,12 +117,10 @@ def comment_replies(request, id):
     return render(request, 'base/product_detail.html', context)
 
 
-
 @login_required(login_url='login')
 def toggle_like(request, id):
     if request.method == 'POST':
         comment = get_object_or_404(Comment, id=id)
-
 
     like_obj = CommentLike.objects.filter(
         user=request.user,
@@ -155,32 +137,29 @@ def toggle_like(request, id):
             comment=comment
         )
 
-
     return redirect("product_detail", id=comment.product.id)
-
 
 
 @login_required(login_url='login')
 def post_ad(request):
-        categories = Category.objects.all()
+    categories = Category.objects.all()
 
-        if request.method == 'POST':
+    if request.method == 'POST':
 
-            form = ProductForm(request.POST, request.FILES)
+        form = ProductForm(request.POST, request.FILES)
 
-            if form.is_valid():
-                product = form.save(commit=False)
-                product.seller = request.user
-                product.save()
-                return redirect('home')
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.seller = request.user
+            product.save()
+            return redirect('home')
 
+    else:
+        form = ProductForm()
 
+    context = {'form': form, 'categories': categories}
+    return render(request, 'base/ad_form.html', context)
 
-        else:
-            form = ProductForm()
-
-        context = {'form': form, 'categories': categories}
-        return render(request, 'base/ad_form.html', context)
 
 @login_required(login_url='login')
 def edit_ad(request, id):
@@ -196,7 +175,8 @@ def edit_ad(request, id):
                 messages.success(request, 'Product updated successfully')
                 return redirect('home')
             else:
-                messages.error(request, 'Failed to update ad. Please check the errors below.')
+                messages.error(
+                    request, 'Failed to update ad. Please check the errors below.')
         context = {'product': product, 'form': form, 'page': page}
 
         return render(request, 'base/ad_form.html', context)
@@ -205,6 +185,7 @@ def edit_ad(request, id):
         messages.error(request, 'You are not allowed to edit this product.')
         return redirect('home')
 
+
 def delete_ad(request, id):
     product = get_object_or_404(Product, id=id)
     if request.user.id == product.seller.id or request.user.role == 'admin':
@@ -212,19 +193,17 @@ def delete_ad(request, id):
             product.delete()
             messages.success(request, 'Product deleted successfully')
 
-
         else:
-            return render( request, 'base/delete.html',{'obj': product} )
+            return render(request, 'base/delete.html', {'obj': product})
     else:
         messages.error(request, 'You are not allowed to delete this product.')
 
     return redirect('home')
 
+
 @login_required(login_url='login')
 def add_comment(request, id):
     product = get_object_or_404(Product, id=id)
-
-
 
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -246,18 +225,5 @@ def add_comment(request, id):
         messages.success(request, 'Comment added successfully')
         return redirect('product_detail', id=product.id)
 
-
-
-
-
     context = {'product': product, 'form': form}
     return render(request, 'base/product_detail.html', context)
-
-
-
-
-
-
-
-
-
