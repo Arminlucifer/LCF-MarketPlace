@@ -14,6 +14,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'price',
             'seller',
             'added',
+            'updated',
             'is_approved',
             'image',
         ]

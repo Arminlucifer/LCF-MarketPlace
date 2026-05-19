@@ -5,9 +5,12 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework import generics, mixins
 
+from .permissions import (IsOwnerOrReadOnly,
+                          StaffProductEditor,)
 from base.models import Product, Category
 from .serializers import (ProductSerializer,
                           CategorySerializer,)
+
 
 # def get_products(request):
 #     products = Product.objects.all().first()
@@ -43,9 +46,15 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
         serializer.save(seller=user)
 
 
-class ProductRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+class ProductRetrieveUpdateDestroyAPIView(
+        generics.RetrieveUpdateDestroyAPIView):
+
+    staff_perm = True
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [IsOwnerOrReadOnly |
+                          StaffProductEditor]
 
 
 class CategoryMixinAPIView(generics.GenericAPIView,
