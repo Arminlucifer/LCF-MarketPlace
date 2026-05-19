@@ -1,0 +1,11 @@
+django
+djangorestframework
+pyyaml
+requests
+django-cors-headers 
+psycopg
+psycopg2
+pillow
+static
+pygame
+sqlparse

@@ -72,13 +72,9 @@ class CommentLike(models.Model):
 class Notification(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
     text = models.CharField(max_length=250)
-
     is_read = models.BooleanField(default=False)
-
     created_at = models.TimeField(auto_now_add=True)
 
     content_type = models.ForeignKey(
