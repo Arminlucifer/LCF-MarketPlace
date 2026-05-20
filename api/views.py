@@ -4,6 +4,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework import generics, mixins
+from rest_framework.filters import (SearchFilter,
+                                    OrderingFilter)
+
 
 from .permissions import (IsOwnerOrReadOnly,
                           StaffProductEditor,)
@@ -40,6 +43,12 @@ from .serializers import (ProductSerializer,
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = [SearchFilter,
+                       OrderingFilter]
+
+    search_fields = ['name', 'category__name',
+                     'seller__name', 'seller__username']
+    ordering_fields = ['price', 'added', 'name']
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -86,17 +95,15 @@ class CategoryMixinAPIView(generics.GenericAPIView,
 class VendorDashboardProductAPIView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
     permission_classes = [
-                        IsOwnerOrReadOnly |
-                        StaffProductEditor]
+        IsOwnerOrReadOnly |
+        StaffProductEditor]
 
-
-    
     def get_queryset(self):
         user = self.request.user
- 
+
         if not user.is_authenticated:
             return Product.objects.none()
-            
+
         return Product.objects.filter(seller=user)
 
     def perform_create(self, serializer):
