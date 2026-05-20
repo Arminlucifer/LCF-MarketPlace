@@ -11,4 +11,14 @@ class UserPublicSerializer(serializers.Serializer):
 
 class CategoryPublicSerializer(serializers.Serializer):
     name = serializers.CharField(read_only=True)
-    photo = serializers.ImageField(read_only=True)
+    photo = serializers.SerializerMethodField(read_only=True)
+
+    def get_photo(self, obj):
+
+        if not obj.photo:
+            return None
+
+        request = self.context.get('request')
+        if request is not None:
+            return request.build_absolute_uri(obj.photo.url)
+        return obj.photo.url
