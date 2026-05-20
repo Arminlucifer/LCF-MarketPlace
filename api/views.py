@@ -81,3 +81,23 @@ class CategoryMixinAPIView(generics.GenericAPIView,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+class VendorDashboardProductAPIView(generics.ListCreateAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [
+                        IsOwnerOrReadOnly |
+                        StaffProductEditor]
+
+
+    
+    def get_queryset(self):
+        user = self.request.user
+ 
+        if not user.is_authenticated:
+            return Product.objects.none()
+            
+        return Product.objects.filter(seller=user)
+
+    def perform_create(self, serializer):
+        serializer.save(seller=self.request.user)
