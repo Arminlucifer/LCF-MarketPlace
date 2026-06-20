@@ -53,14 +53,19 @@ class ProductSerializer(serializers.ModelSerializer):
     def get_link(self, obj):
         request = self.context.get('request')
 
-        print(self.context)
-
         if request is None:
             return None
 
         return reverse('product-detail', kwargs={'pk': obj.id}, request=request)
 
     def get_related_products(self, obj):
+        # DRF wraps the serializer in a ListSerializer when many=True (i.e.
+        # on the list endpoint). Running this extra query for every row in
+        # a paginated list is its own N+1 source, so only compute it on
+        # single-object (detail) responses.
+        if isinstance(self.parent, serializers.ListSerializer):
+            return []
+
         if not obj.category:
             return []
         qs = Product.objects.filter(category=obj.category).exclude(id=obj.id)

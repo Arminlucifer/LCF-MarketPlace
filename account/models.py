@@ -3,8 +3,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-
-
 # Create your models here.
 
 
@@ -18,17 +16,18 @@ class User(AbstractUser):
     bio = models.TextField(max_length=500, null=True, blank=True)
     avatar = models.ImageField(default='default.png', null=True)
 
-
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
     ROLE_CHOICES = (
-        ("admin","Admin"),
-        ("seller","Seller"),
-        ("Customer","Customer")
+        ("admin", "Admin"),
+        ("seller", "Seller"),
+        ("customer", "Customer"),  # was "Customer" (capitalized) — inconsistent
+        # with the other two values and a likely source of bugs anywhere
+        # the code compares user.role == 'customer'.
     )
 
-    role = models.CharField(choices=ROLE_CHOICES, default='Customer', max_length=10)
+    role = models.CharField(choices=ROLE_CHOICES, default='customer', max_length=10)
 
     referral_id = models.UUIDField(blank=True, null=True)
 
@@ -36,8 +35,5 @@ class User(AbstractUser):
 
     REQUIRED_FIELDS = ['name', 'username']
 
-
-
     def __str__(self):
         return self.username
-

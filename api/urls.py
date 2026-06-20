@@ -2,7 +2,8 @@ from django.urls import path
 
 from . views import (ProductListCreateAPIView,
                      ProductRetrieveUpdateDestroyAPIView,
-                     CategoryMixinAPIView)
+                     CategoryMixinAPIView,
+                     VendorDashboardProductAPIView)
 
 urlpatterns = [
     path('products/', ProductListCreateAPIView.as_view()),
@@ -10,6 +11,8 @@ urlpatterns = [
          name = 'product-detail'),
     path('category', CategoryMixinAPIView.as_view()),
     path('category/<int:pk>', CategoryMixinAPIView.as_view()),
+    path('dashboard/products/', VendorDashboardProductAPIView.as_view(),
+         name = 'vendor-dashboard-products'),
 
 
 ]

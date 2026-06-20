@@ -10,8 +10,14 @@ def validate_price(price):
     return price
 
 
-def validate_caption(data):
-    pass
+def validate_caption(value):
+    if value and not value.strip():
+        raise serializers.ValidationError(
+            'Caption cannot be blank or only whitespace.')
+    if value and len(value) > 100:
+        raise serializers.ValidationError(
+            f'Caption must be 100 characters or fewer, got {len(value)}.')
+    return value
 
 
 # def validate_title(title):

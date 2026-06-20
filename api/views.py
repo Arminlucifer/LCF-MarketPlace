@@ -41,7 +41,11 @@ from .serializers import (ProductSerializer,
 #             return Response(serializer.data)
 
 class ProductListCreateAPIView(generics.ListCreateAPIView):
-    queryset = Product.objects.all()
+    # select_related pulls seller + category in the same SQL query (JOIN)
+    # instead of one extra query per product for each nested relation.
+    # Without this, ProductSerializer's nested `user` and `category_data`
+    # fields each triggered a separate DB hit per row (classic N+1).
+    queryset = Product.objects.select_related('seller', 'category').all()
     serializer_class = ProductSerializer
     filter_backends = [SearchFilter,
                        OrderingFilter]
@@ -60,7 +64,7 @@ class ProductRetrieveUpdateDestroyAPIView(
 
     staff_perm = True
 
-    queryset = Product.objects.all()
+    queryset = Product.objects.select_related('seller', 'category').all()
     serializer_class = ProductSerializer
     permission_classes = [IsOwnerOrReadOnly |
                           StaffProductEditor]
@@ -104,7 +108,7 @@ class VendorDashboardProductAPIView(generics.ListCreateAPIView):
         if not user.is_authenticated:
             return Product.objects.none()
 
-        return Product.objects.filter(seller=user)
+        return Product.objects.select_related('seller', 'category').filter(seller=user)
 
     def perform_create(self, serializer):
         serializer.save(seller=self.request.user)
