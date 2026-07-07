@@ -104,10 +104,10 @@ WSGI_APPLICATION = 'lcfshop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lcfshop_db',
+        'NAME': 'Marketplace_db',
         'USER': 'postgres',
         'PASSWORD': 'A0053533038',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
