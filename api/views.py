@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework import generics, mixins
 from rest_framework.filters import (SearchFilter,
                                     OrderingFilter)
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 from .permissions import (IsOwnerOrReadOnly,
@@ -45,6 +46,7 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     # instead of one extra query per product for each nested relation.
     # Without this, ProductSerializer's nested `user` and `category_data`
     # fields each triggered a separate DB hit per row (classic N+1).
+    parser_classes = [MultiPartParser, FormParser]
     queryset = Product.objects.select_related('seller', 'category').all()
     serializer_class = ProductSerializer
     filter_backends = [SearchFilter,

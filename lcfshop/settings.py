@@ -48,10 +48,24 @@ INSTALLED_APPS = [
     # Third Party Packages
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_spectacular',
 
 ]
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'LCFSHOP API',
+    'DESCRIPTION': 'Documentation for LCFSHOP backend',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+
+
+    'COMPONENT_SPLIT_REQUEST': True,
+}
+
 REST_FRAMEWORK = {
+
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "api.authentications.TokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
